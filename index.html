@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Ticket</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!--Header and Menu Section-->
+    <header class="container">
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Contact</a></li>
+                <li><a class="active" href="#">Sign Up</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!--Booking Section-->
+    <main class="main-content container">
+
+        <div class="booking-content">
+            <h1>Mega City Bus</h1>
+            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
+                scrambled it to make a type specimen book.</p>
+        </div>
+
+
+        <div class="booking-form">
+            <h3>Explore By Bus</h3>
+
+            <div class="inputs">
+                <div class="input-group">
+                    <label" for="">From</label>
+                        <input class="inp-style" type="text" name="" placeholder="Dhaka">
+                </div>
+                <div class="input-group">
+                    <label" for="">From</label>
+                        <input class="inp-style" type="text" name="" placeholder="Chittagone">
+                </div>
+            </div>
+
+            <div class="inputs">
+                <div class="input-group">
+                    <label" for="">Departure</label>
+                        <input class="inp-style" type="date" name="">
+                </div>
+                <div class="input-group">
+                    <label for="">Return</label>
+                    <input class="inp-style" type="date" name="">
+                </div>
+            </div>
+            <div class="inputs">
+                <div class="input-group f-class">
+                    <div>
+                        <label for="">First Class ($150)</label>
+                        <input id="first-class-seat" class="inp-style inp-width" type="number" name="">
+                    </div>
+                    <div class="plus-minus-btn">
+                        <span id="first-class-increase" class="btn-style sm-btn"
+                            onclick="seatCounter('first', true);">+</span>
+                        <span id="first-class-decrease" class="btn-style sm-btn"
+                            onclick="seatCounter('first', false);">-</span>
+                    </div>
+                </div>
+                <div class="input-group f-class">
+                    <div>
+                        <label for="">Economy ($100)</label>
+                        <input id="economy-class-seat" class="inp-style inp-width" type="number" name="">
+                    </div>
+                    <div class="plus-minus-btn">
+                        <span id="economy-class-increase" class="btn-style sm-btn"
+                            onclick="seatCounter('economy', true);">+</span>
+                        <span id="economy-class-decrease" class="btn-style sm-btn"
+                            onclick="seatCounter('economy', false);">-</span>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="calculations">
+                <div class="amount">
+                    <div class="left">
+                        <p>Subtotal</p>
+                    </div>
+                    <div class="right">
+                        <p>$<span id="subtotal">0</span></p>
+                    </div>
+                </div>
+
+                <div class="amount">
+                    <div class="left">
+                        <p>Charge 10% VAT</p>
+                    </div>
+                    <div class="right">
+                        <p>$<span id="vat">0</span></p>
+                    </div>
+                </div>
+                <hr>
+                <div class="amount">
+                    <div class="left">
+                        <h4>Total</h4>
+                    </div>
+                    <div class="right">
+                        <p>$<span id="total">0</span></p>
+                    </div>
+                </div>
+            </div>
+            <button id="confirmation-ticket" class="btn-style">Book Now</button>
+        </div>
+    </main>
+    <section>
+        <div id="confirmation-area">
+            <div class="message">
+                <p>Your booking resuest is pending please pay <span id="total-amount"></span> for your Ticket
+                    confirmation.</p>
+                <span id="close" class="close-btn">x</span>
+            </div>
+        </div>
+    </section>
+
+
+    <script>
+
+        //Event handler for confirmation Message 
+        document.getElementById('confirmation-ticket').addEventListener('click', function () {
+            confirmTicket();
+        });
+
+
+        //Function for increase and decrease of booked seat with total amount function   
+        function seatCounter(classChoice, isIncrease) {
+            const chooseSeat = document.getElementById(classChoice + '-class-seat');
+            if (chooseSeat.value == "") {
+                chooseSeat.value = 0;
+            }
+            const countSeat = parseInt(chooseSeat.value);
+            let newCountSeat = countSeat;
+            if (isIncrease == true) {
+                newCountSeat = countSeat + 1;
+            }
+            if (isIncrease == false && countSeat > 0) {
+                newCountSeat = countSeat - 1;
+            }
+
+            chooseSeat.value = newCountSeat;
+            // Total amount function
+            getTotalCost();
+        }
+
+        // Function for get value of seat booked
+        function getSeatCount(seatClass) {
+            const chooseSeat = document.getElementById(seatClass + '-class-seat');
+            if (chooseSeat.value == "") {
+                chooseSeat.value = 0;
+            }
+            const countSeat = parseInt(chooseSeat.value);
+            return countSeat;
+        }
+
+        // Function for calculation of subtotal, vat and total amount
+        function getTotalCost() {
+            const firstClassSeat = getSeatCount('first');
+            const economyClassSeat = getSeatCount('economy');
+
+            const subtotal = firstClassSeat * 150 + economyClassSeat * 100;
+            document.getElementById('subtotal').innerText = subtotal;
+
+            const vat = subtotal * .1;
+            document.getElementById('vat').innerText = vat;
+
+            const total = subtotal + vat;
+            document.getElementById('total').innerText = total;
+        }
+
+
+        // Function for confirmation message
+        function confirmTicket() {
+            const confirmMessage = document.getElementById('confirmation-area');
+            const totalAmount = document.getElementById('total-amount');
+            const total = document.getElementById('total').innerText;
+            totalAmount.innerText = '$' + total;
+
+            // Reset all value
+            resetAll();
+
+            confirmMessage.style.display = "block";
+
+            //Event handler for confirmation Message close button
+            document.getElementById('close').addEventListener('click', function () {
+                const confirmMassage = document.getElementById('confirmation-area');
+                confirmMassage.style.display = "none";
+            })
+        }
+
+
+        // Function for reset all value
+        function resetAll() {
+            document.getElementById('first-class-seat').value = '';
+            document.getElementById('economy-class-seat').value = '';
+            document.getElementById('subtotal').innerText = '0';
+            document.getElementById('vat').innerText = '0';
+            document.getElementById('total').innerText = '0';
+        }
+    </script>
+    <!--Thank You-->
+</body>
+
+</html>
